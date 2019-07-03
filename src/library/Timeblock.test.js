@@ -1,4 +1,5 @@
-let Timeblock = require('./Timeblock');
+const Timeblock = require('./Timeblock');
+const expander = require('./time-expander');
 
 test('initialize', () => {
   let block = new Timeblock('MON', 0, 60);
@@ -21,4 +22,16 @@ test('calculate end overflow', () => {
 test('pretty print', () => {
   let block = new Timeblock('MON', 0, 60);
   expect(block.prettyPrint()).toBe('Monday : 12:00 AM - 01:00 AM');
+});
+
+test('random', () => {
+  let days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+  let day = days[Math.floor(Math.random() * 7)];
+  let start = Math.floor(Math.random() * 1440);
+  let end = Math.floor(Math.random() * 1440);
+  while (end < start) {
+    end = Math.floor(Math.random() * 1440);
+  }
+  let block = new Timeblock(day, start, end - start);
+  expect(block.prettyPrint()).toBe(`${expander.days[day]} : ${expander.minuteToTime(start)} - ${expander.minuteToTime(end)}`);
 });
