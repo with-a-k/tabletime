@@ -1,4 +1,4 @@
-const expander = require('./time-expander.js');
+const expander = require('./time-expander');
 
 test('12 AM', () => {
   expect(expander.minuteToTime(0)).toStrictEqual("12:00 AM");
