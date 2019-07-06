@@ -5,7 +5,7 @@ class Schedule {
   constructor(zone, blocks) {
     this.zone = zone;
     this.blocks = blocks;
-    let overlaps = this.checkOverlap();
+    this.overlaps = this.checkOverlap();
     this.collapseOverlap();
   }
 
@@ -32,7 +32,14 @@ class Schedule {
   }
 
   collapseOverlap() {
-
+    let collapsed = this.blocks;
+    let overlaps = this.overlaps;
+    let collapse = {};
+    while(overlaps.length > 0) {
+      collapse = overlaps.pop();
+      begin = collapsed.find((block) => block.tag == collapse);
+    }
+    this.blocks = collapsed;
   }
 
   prettyAvailability() {
