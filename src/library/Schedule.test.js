@@ -17,7 +17,16 @@ test('initialize multiple', () => {
 
 test('collision', () => {
   let wedAfternoon = new Timeblock('WED', 300, 300);
+  let afternoonCode = wedAfternoon.tag;
   let wedEvening = new Timeblock('WED', 450, 300);
   let testSchedule = new Schedule('MDT', [wedAfternoon, wedEvening]);
-  expect(testSchedule.checkOverlap()).toStrictEqual({"WED300300": ["WED450300"]});
+  expect(testSchedule.overlaps).toEqual({[afternoonCode]: [wedEvening]});
+  expect(testSchedule.blocks.length).toBe(1);
+});
+
+test('no collision on different days', () => {
+  let wedAfternoon = new Timeblock('WED', 300, 300);
+  let thuAfternoon = new Timeblock('THU', 330, 300);
+  let testSchedule = new Schedule('MDT', [wedAfternoon, thuAfternoon]);
+  expect(testSchedule.overlaps).toEqual({});
 });

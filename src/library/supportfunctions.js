@@ -5,4 +5,8 @@ function groupBy(xs, key) {
   }, {});
 };
 
-module.exports = { groupBy };
+function flatArray(array) {
+  return array.reduce((acc, val) => Array.isArray(val) ? acc.concat(flatArray(val)) : acc.concat(val), []);
+}
+
+module.exports = { groupBy, flatArray };

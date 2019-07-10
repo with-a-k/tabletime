@@ -1,4 +1,4 @@
-let moment = require('moment-timezone');
+let Moment = require('moment-timezone');
 let expander = require('./time-expander');
 
 class Timeblock {
@@ -18,7 +18,7 @@ class Timeblock {
   }
 
   shortCode() {
-    return `${this.day}${this.start}${this.length}`;
+    return `${this.day}${this.start}${this.length}${Moment.now()}`;
   }
 }
 
