@@ -20,6 +20,14 @@ class Timeblock {
   shortCode() {
     return `${this.day}${this.start}${this.length}${Moment.now()}`;
   }
+
+  isOverlapping(other) {
+    if (this.day == other.day) {
+      return ((this.start >= other.start && this.start <= other.end()) ||
+        (other.start >= this.start && other.start <= this.end()));
+    }
+    return false;
+  }
 }
 
 module.exports = Timeblock;

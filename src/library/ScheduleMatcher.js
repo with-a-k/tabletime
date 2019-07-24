@@ -14,7 +14,26 @@ function match(schedules, minimumAttendance) {
     throw new Error("Cannot match less than two schedules. Try increasing your minimum attendance.");
   }
   let matching = {};
+  let overStart = 0;
+  let overEnd = 0;
+
+  let hostSchedule = schedules.shift();
+  hostSchedule.blocks.forEach((hostBlock) => {
+    schedules.forEach((guestSchedule) => {
+      guestSchedule.blocks.forEach((guestBlock) => {
+        if(hostBlock.isOverlapping(guestBlock)) {
+          overStart = Math.max(hostBlock.start, guestBlock.start);
+          overEnd = Math.min(hostBlock.end(), guestBlock.end());
+        }
+      });
+    });
+  });
+
   return matching;
+}
+
+function isInside(blockA, blockB) {
+
 }
 
 module.exports = { match }
