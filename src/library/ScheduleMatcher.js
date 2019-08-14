@@ -16,6 +16,7 @@ function match(schedules, minimumAttendance) {
   let matching = {};
   let overStart = 0;
   let overEnd = 0;
+  let matchblock;
 
   let hostSchedule = schedules.shift();
   hostSchedule.blocks.forEach((hostBlock) => {
@@ -24,16 +25,30 @@ function match(schedules, minimumAttendance) {
         if(hostBlock.isOverlapping(guestBlock)) {
           overStart = Math.max(hostBlock.start, guestBlock.start);
           overEnd = Math.min(hostBlock.end(), guestBlock.end());
+          matching[`${hostBlock.day}/${overStart}-${overEnd}`] = typeof matching[`${hostBlock.day}/${overStart}-${overEnd}`] === undefined ? 1 : matching[`${hostBlock.day}/${overStart}-${overEnd}`]++;
         }
       });
     });
   });
 
-  return matching;
+  let inverse = invertMatches(matching);
+
+  return inverse[Math.max(Object.keys(inverse))].sort();
 }
 
 function isInside(blockA, blockB) {
 
+}
+
+function invertMatches(matches) {
+  let inverse = {};
+  Object.values(matches).forEach((count) => {
+    inverse[count] = [];
+  });
+  Object.keys(matches).forEach((match) => {
+    inverse[matches[match]].push(match);
+  });
+  return inverse;
 }
 
 module.exports = { match }

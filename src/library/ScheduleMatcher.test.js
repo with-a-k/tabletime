@@ -22,3 +22,42 @@ test('error with too low minimum attendance', () => {
     ScheduleMatcher.match(["dummy", "dummy"], 1);
   }).toThrow('Cannot match less than two schedules. Try increasing your minimum attendance.');
 });
+
+test('simple match', () => {
+  let sameBlock = new Timeblock('SAT', 1000, 180);
+  let scheduleA = new Schedule('MDT', [sameBlock]);
+  let scheduleB = new Schedule('MDT', [sameBlock]);
+  expect(ScheduleMatcher.match([scheduleA, scheduleB], 2)).toStrictEqual(["SAT/1000-1180"]);
+});
+
+test('partial match', () => {
+  let oneBlock = new Timeblock('SAT', 1000, 180);
+  let twoBlock = new Timeblock('SAT', 1120, 120);
+  let scheduleA = new Schedule('MDT', [oneBlock]);
+  let scheduleB = new Schedule('MDT', [twoBlock]);
+  expect(ScheduleMatcher.match([scheduleA, scheduleB], 2)).toStrictEqual(["SAT/1120-1180"]);
+});
+
+test('different timezones', () => {
+  let sameBlock = new Timeblock('SAT', 1000, 180);
+  let scheduleA = new Schedule('MDT', [sameBlock]);
+  let scheduleB = new Schedule('PDT', [sameBlock]);
+  expect(ScheduleMatcher.match([scheduleA, scheduleB], 2)).toStrictEqual(["SAT/1000-1120"]);
+});
+
+test('three schedules', () => {
+  let sameBlock = new Timeblock('SAT', 1000, 180);
+  let scheduleA = new Schedule('MDT', [sameBlock]);
+  let scheduleB = new Schedule('MDT', [sameBlock]);
+  let scheduleC = new Schedule('MDT', [sameBlock]);
+  expect(ScheduleMatcher.match([scheduleA, scheduleB, scheduleC], 3)).toStrictEqual(["SAT/1000-1180"]);
+});
+
+test('match two of three', () => {
+  let oneBlock = new Timeblock('SAT', 1000, 180);
+  let twoBlock = new Timeblock('WED', 1200, 180);
+  let scheduleA = new Schedule('MDT', [oneBlock, twoBlock]);
+  let scheduleB = new Schedule('MDT', [oneBlock]);
+  let scheduleC = new Schedule('MDT', [twoBlock]);
+  expect(ScheduleMatcher.match([scheduleA, scheduleB, scheduleC], 2)).toStrictEqual(["SAT/1000-1180", "WED/1200-1380"].sort());
+});
