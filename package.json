@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "dotenv": "^8.1.0",
+    "eslint-utils": "1.4.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.25",
     "react": "^16.8.6",
